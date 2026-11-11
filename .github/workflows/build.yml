@@ -1,0 +1,33 @@
+name: Build English Grammar Exam APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract ZIP
+        run: |
+          mkdir project
+          unzip -q English_Grammar_Exam_Ready_v2.zip -d project
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build APK
+        run: |
+          cd project
+          gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: English-Grammar-Exam-APK
+          path: project/**/build/outputs/apk/debug/*.apk
